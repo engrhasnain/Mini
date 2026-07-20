@@ -2,6 +2,30 @@
 title MiniMart Frontend
 cd /d "%~dp0frontend"
 
+node --version > "%TEMP%\minimart_nodecheck.txt" 2>&1
+
+findstr /b /c:"v" "%TEMP%\minimart_nodecheck.txt" >nul
+if errorlevel 1 goto :no_node
+
+del "%TEMP%\minimart_nodecheck.txt" >nul 2>&1
+goto :node_ok
+
+:no_node
+del "%TEMP%\minimart_nodecheck.txt" >nul 2>&1
+echo ============================================
+echo Node.js is not installed on this computer yet.
+echo.
+echo Fastest fix - open Command Prompt and run:
+echo   winget install --id OpenJS.NodeJS.LTS -e --accept-package-agreements --accept-source-agreements
+echo.
+echo Or install manually from https://nodejs.org/ (LTS version).
+echo.
+echo Then restart the computer and double-click this file again.
+echo ============================================
+pause
+exit /b 1
+
+:node_ok
 if not exist node_modules (
     echo ============================================
     echo First-time setup - installing frontend packages.

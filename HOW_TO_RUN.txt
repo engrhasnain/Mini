@@ -1,18 +1,17 @@
 HOW TO RUN THIS APP (MiniMart)
 ================================
 
-STEP 1 - Install two free programs (skip any you already have)
+STEP 1 - Install Python and Node.js
 ------------------------------------------------------------
-1. Python:  https://www.python.org/downloads/
-   - Click "Download Python" and run the installer.
-   - IMPORTANT: On the very first install screen, check the box
-     that says "Add python.exe to PATH" before clicking Install.
+Easiest way: double-click "install-requirements.bat" in this folder.
+It installs both automatically - just click "Yes" if Windows asks
+for permission. When it finishes, RESTART THE COMPUTER.
 
-2. Node.js (choose the "LTS" version): https://nodejs.org/
-   - Run the installer and click Next/Next/Install with the defaults.
-
-Restart the computer after installing if this is the first time
-either program has been installed.
+(If that doesn't work, install them manually instead:
+   Python:  https://www.python.org/downloads/
+            - check "Add python.exe to PATH" during install
+   Node.js: https://nodejs.org/ - pick the LTS version
+ Then restart the computer.)
 
 STEP 2 - Get the project
 ------------------------------------------------------------
@@ -21,7 +20,8 @@ STEP 2 - Get the project
 3. Find the downloaded ZIP file (usually in the Downloads folder),
    right-click it, and choose "Extract All...".
 4. Open the extracted folder. You should see this file (HOW_TO_RUN.txt)
-   along with "start-backend.bat" and "start-frontend.bat".
+   along with "install-requirements.bat", "start-backend.bat" and
+   "start-frontend.bat".
 
 STEP 3 - Run it
 ------------------------------------------------------------
@@ -31,11 +31,15 @@ STEP 3 - Run it
         Uvicorn running on http://127.0.0.1:8000
    Leave this window open - do not close it.
 
+   If it instead says Python is not installed, go back to Step 1.
+
 2. Double-click "start-frontend.bat".
    Another black window will open. The first time, it will take a
    few minutes to set itself up. Wait until you see:
         Local:  http://localhost:3000
    Leave this window open too.
+
+   If it instead says Node.js is not installed, go back to Step 1.
 
 3. Open a web browser (Chrome/Edge) and go to:
         http://localhost:3000
@@ -43,5 +47,5 @@ STEP 3 - Run it
 The app should now be up and running!
 
 To stop it later, just close both black windows.
-To run it again another day, just double-click the two .bat files
-again (setup will be skipped since it's already done).
+To run it again another day, just double-click the two start-*.bat
+files again (setup will be skipped since it's already done).

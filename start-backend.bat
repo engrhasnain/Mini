@@ -2,6 +2,34 @@
 title MiniMart Backend
 cd /d "%~dp0backend"
 
+python --version > "%TEMP%\minimart_pycheck.txt" 2>&1
+
+findstr /c:"was not found" "%TEMP%\minimart_pycheck.txt" >nul
+if not errorlevel 1 goto :no_python
+
+findstr /b /c:"Python " "%TEMP%\minimart_pycheck.txt" >nul
+if errorlevel 1 goto :no_python
+
+del "%TEMP%\minimart_pycheck.txt" >nul 2>&1
+goto :python_ok
+
+:no_python
+del "%TEMP%\minimart_pycheck.txt" >nul 2>&1
+echo ============================================
+echo Python is not installed on this computer yet.
+echo.
+echo Fastest fix - open Command Prompt and run:
+echo   winget install --id Python.Python.3.12 -e --accept-package-agreements --accept-source-agreements
+echo.
+echo Or install manually from https://www.python.org/downloads/
+echo and check "Add python.exe to PATH" during install.
+echo.
+echo Then restart the computer and double-click this file again.
+echo ============================================
+pause
+exit /b 1
+
+:python_ok
 if not exist .venv (
     echo ============================================
     echo First-time setup - installing backend packages.
