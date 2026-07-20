@@ -31,15 +31,25 @@ exit /b 1
 
 :python_ok
 if not exist .venv (
+    python -m venv .venv
+)
+call ".venv\Scripts\activate.bat"
+
+if not exist ".venv\Scripts\uvicorn.exe" (
     echo ============================================
-    echo First-time setup - installing backend packages.
+    echo Installing backend packages.
     echo This can take a minute or two, please wait.
     echo ============================================
-    python -m venv .venv
-    call ".venv\Scripts\activate.bat"
     pip install -r requirements.txt
-) else (
-    call ".venv\Scripts\activate.bat"
+)
+
+if not exist ".venv\Scripts\uvicorn.exe" (
+    echo ============================================
+    echo Something went wrong installing the backend packages.
+    echo Scroll up to see the actual error from pip above.
+    echo ============================================
+    pause
+    exit /b 1
 )
 
 echo.

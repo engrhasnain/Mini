@@ -26,12 +26,21 @@ pause
 exit /b 1
 
 :node_ok
-if not exist node_modules (
+if not exist "node_modules\.bin\next.cmd" (
     echo ============================================
-    echo First-time setup - installing frontend packages.
+    echo Installing frontend packages.
     echo This can take a few minutes, please wait.
     echo ============================================
     call npm install
+)
+
+if not exist "node_modules\.bin\next.cmd" (
+    echo ============================================
+    echo Something went wrong installing the frontend packages.
+    echo Scroll up to see the actual error from npm above.
+    echo ============================================
+    pause
+    exit /b 1
 )
 
 echo.
