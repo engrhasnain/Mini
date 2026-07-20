@@ -1,4 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+import uuid as uuid_lib
+from pathlib import Path
+
+from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile, File, status
 from sqlalchemy.orm import Session
 from typing import List
 from uuid import UUID
@@ -10,8 +13,34 @@ from app.schemas.product import ProductCreate, ProductUpdate, ProductOut
 from app.schemas.order import OrderOut, OrderStatusUpdate
 from app.schemas.user import UserOut
 from app.core.dependencies import get_admin_user
+from app.core.config import UPLOAD_DIR
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
+
+ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
+MAX_IMAGE_SIZE = 5 * 1024 * 1024  # 5MB
+
+
+# --- Image Upload ---
+
+@router.post("/products/upload-image")
+async def upload_product_image(
+    request: Request,
+    file: UploadFile = File(...),
+    _: User = Depends(get_admin_user),
+):
+    if file.content_type not in ALLOWED_IMAGE_TYPES:
+        raise HTTPException(status_code=400, detail="Only JPG, PNG, WEBP or GIF images are allowed")
+
+    contents = await file.read()
+    if len(contents) > MAX_IMAGE_SIZE:
+        raise HTTPException(status_code=400, detail="Image must be smaller than 5MB")
+
+    ext = Path(file.filename or "").suffix.lower() or ".jpg"
+    filename = f"{uuid_lib.uuid4()}{ext}"
+    (UPLOAD_DIR / filename).write_bytes(contents)
+
+    return {"url": f"{str(request.base_url).rstrip('/')}/uploads/{filename}"}
 
 
 # --- Products ---

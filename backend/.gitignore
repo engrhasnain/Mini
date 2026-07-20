@@ -8,3 +8,9 @@ wheels/
 
 # Virtual environments
 .venv
+
+# SQLite database
+*.db
+
+# Uploaded product images
+/uploads/

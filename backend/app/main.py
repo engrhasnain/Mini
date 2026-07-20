@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.config import settings
+from fastapi.staticfiles import StaticFiles
+from app.core.config import settings, UPLOAD_DIR
 from app.database import Base, engine
 from app.routers import auth, products, cart, orders, admin
 
@@ -20,6 +21,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Uploaded product images
+app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
 
 # Routers
 app.include_router(auth.router)

@@ -116,6 +116,14 @@ export const ordersApi = {
 // ─── Admin API ───────────────────────────────────────────────────────────────
 export const adminApi = {
   // Products
+  uploadImage: (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    return api.post<{ url: string }>("/admin/products/upload-image", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+  },
+
   createProduct: (data: ProductInput) =>
     api.post<Product>("/admin/products", data),
 

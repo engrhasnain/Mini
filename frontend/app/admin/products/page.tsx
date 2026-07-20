@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus, Pencil, Trash2, X, Package, Search } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Package, Search, Upload, Image as ImageIcon } from "lucide-react";
 import { Product } from "@/types";
 import { adminApi, productsApi } from "@/lib/api";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
@@ -29,6 +29,7 @@ export default function AdminProductsPage() {
   const [form, setForm] = useState<ProductInput>(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -92,6 +93,29 @@ export default function AdminProductsPage() {
       toast.error(msg);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image must be smaller than 5MB");
+      e.target.value = "";
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const res = await adminApi.uploadImage(file);
+      setForm((f) => ({ ...f, image_url: res.data.url }));
+      toast.success("Image uploaded!");
+    } catch (err: any) {
+      toast.error(err?.response?.data?.detail || "Upload failed.");
+    } finally {
+      setUploading(false);
+      e.target.value = "";
     }
   };
 
@@ -268,13 +292,40 @@ export default function AdminProductsPage() {
                 />
               </div>
               <div>
-                <label className="label">Image URL</label>
-                <input
-                  className="input-field"
-                  value={form.image_url}
-                  onChange={(e) => setForm({ ...form, image_url: e.target.value })}
-                  placeholder="https://..."
-                />
+                <label className="label">Product Image</label>
+                <div className="flex items-center gap-4">
+                  {form.image_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={form.image_url}
+                      alt="Preview"
+                      className="w-20 h-20 rounded-xl object-cover border border-white/10 flex-shrink-0"
+                    />
+                  ) : (
+                    <div className="w-20 h-20 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center flex-shrink-0">
+                      <ImageIcon size={20} className="text-white/20" />
+                    </div>
+                  )}
+                  <div className="flex-1 space-y-2">
+                    <label className="btn-secondary inline-flex items-center gap-2 cursor-pointer text-sm px-4 py-2">
+                      <Upload size={14} />
+                      {uploading ? "Uploading..." : "Upload Image"}
+                      <input
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp,image/gif"
+                        className="hidden"
+                        onChange={handleImageChange}
+                        disabled={uploading}
+                      />
+                    </label>
+                    <input
+                      className="input-field text-xs"
+                      value={form.image_url}
+                      onChange={(e) => setForm({ ...form, image_url: e.target.value })}
+                      placeholder="or paste an image URL"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 

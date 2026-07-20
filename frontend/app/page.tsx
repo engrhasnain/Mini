@@ -129,16 +129,20 @@ export default async function HomePage() {
 
       {/* ================= CTA ================= */}
       <section className="page-container pb-24">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-500/20 via-orange-500/10 to-transparent border border-orange-500/20 p-14 text-center">
+        <div className="relative overflow-hidden rounded-3xl bg-[#161005] border border-orange-500/30 p-14 text-center">
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-orange-500/25 rounded-full blur-[100px]" />
+          </div>
+
           <h2 className="font-bold text-4xl mb-4 relative z-10">
             Ready to start shopping?
           </h2>
-          <p className="text-white/50 mb-8 relative z-10 text-lg">
+          <p className="text-white/60 mb-8 relative z-10 text-lg">
             Join thousands of happy customers today.
           </p>
           <Link
             href="/register"
-            className="btn-primary inline-flex items-center gap-2 relative z-10"
+            className="btn-primary inline-flex items-center gap-2 relative z-10 text-base px-8 py-3"
           >
             Get Started — It&apos;s Free
             <ArrowRight size={16} />
